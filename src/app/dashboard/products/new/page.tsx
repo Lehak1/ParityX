@@ -2,12 +2,19 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageWithBackButton } from "../../_components/PageWithBackButton";
 import ProductDetailsForm from "../../_components/forms/ProductDetailsForm";
+import { HasPermission } from "@/components/HasPermission";
+import { canCreateProduct } from "@/server/permissions";
 
 
 
 export default function newpage({backbutton,title,children}:{backbutton:string,title:string,children:string}){
 return (
   <PageWithBackButton pageTitle="New Product" backButtonHref="/dashboard/products">
+      <HasPermission
+        permission={canCreateProduct}
+        renderFallback
+        fallbackText="You have already created the maximum number of products. Try upgrading your account to create more."
+      >
    <Card>
 <CardHeader>
 <CardTitle className="text-xl">
@@ -18,6 +25,7 @@ return (
   <ProductDetailsForm/>
 </CardContent>
    </Card>
+   </HasPermission>
   </PageWithBackButton>
 )
 

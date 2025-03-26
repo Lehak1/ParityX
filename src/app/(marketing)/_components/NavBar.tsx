@@ -10,8 +10,8 @@ export function NavBar() {
         <Link href="/" className="mr-auto">
           <BrandLogo />
         </Link>
-        <Link className="text-lg" href="#">
-          Features
+        <Link className="text-lg" href="/#testimonials">
+          Testimonials
         </Link>
         <Link className="text-lg" href="/#pricing">
           Pricing

@@ -6,7 +6,7 @@ export function NavBar() {
   return (
     <header className="flex py-4 shadow bg-background">
       <nav className="flex items-center gap-10 container">
-        <Link className="mr-auto" href="/dashboard">
+      <Link href="/" className="mr-auto">
           <BrandLogo />
         </Link>
         <Link href="/dashboard/products">Products</Link>

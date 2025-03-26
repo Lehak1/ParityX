@@ -17,6 +17,7 @@ import { formatCompactNumber } from "@/lib/formatters"
 import { ReactNode } from "react"
 import { cn } from "@/lib/utils"
 import { BrandLogo } from "@/components/BrandLogo"
+import { Testimonials } from "./_components/Testimonials"
 
 export default function HomePage() {
   return (
@@ -84,6 +85,13 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+
+
+<section id="testimonials"><Testimonials/></section>
+
+
+
       <footer className="container pt-16 pb-8 flex flex-col sm:flex-row gap-8 sm:gap-4 justify-between items-start">
         <Link href="/">
           <BrandLogo />
@@ -157,6 +165,8 @@ export default function HomePage() {
   )
 }
 
+
+
 function PricingCard({
   name,
   priceInCents,
@@ -171,47 +181,55 @@ function PricingCard({
   return (
     <Card
       className={cn(
-        "relative shadow-none rounded-3xl overflow-hidden",
-        isMostPopular ? "border-accent border-2" : "border-none"
+        "relative shadow-md rounded-3xl overflow-hidden transition-transform transform hover:scale-105",
+        isMostPopular ? "border-accent border-2 bg-white" : "border border-gray-200 bg-white"
       )}
     >
       {isMostPopular && (
-        <div className="bg-accent text-accent-foreground absolute py-1 px-10 -right-8 top-24 rotate-45 origin-top-right">
+        <div className="bg-black text-white absolute py-1 px-10 -right-8 top-24 rotate-45 origin-top-right">
           Most popular
         </div>
       )}
       <CardHeader>
-        <div className="text-accent font-semibold mb-8">{name}</div>
-        <CardTitle className="text-xl font-bold">
+        <div className="text-black font-bold text-2xl mb-4">{name}</div>
+        <CardTitle className="text-xl font-bold text-black">
           ${priceInCents / 100} /mo
         </CardTitle>
-        <CardDescription>
+        <CardDescription className="text-black">
           {formatCompactNumber(maxNumberOfVisits)} pricing page visits/mo
         </CardDescription>
       </CardHeader>
       <CardContent>
         <SignUpButton>
           <Button
-            className="text-lg w-full rounded-lg"
-            variant={isMostPopular ? "accent" : "default"}
+            className={cn(
+              "text-lg w-full rounded-lg mt-4",
+              isMostPopular ? "bg-black text-white hover:bg-black/90" : "bg-black text-white hover:bg-black/90"
+            )}
           >
             Get Started
           </Button>
         </SignUpButton>
       </CardContent>
-      <CardFooter className="flex flex-col gap-4 items-start">
-        <Feature className="font-bold">
+      <CardFooter className="flex flex-col gap-4 items-start mt-4 p-4">
+        <Feature className="font-bold text-black">
           {maxNumberOfProducts}{" "}
           {maxNumberOfProducts === 1 ? "product" : "products"}
         </Feature>
-        <Feature>PPP discounts</Feature>
-        {canAccessAnalytics && <Feature>Advanced analytics</Feature>}
-        {canRemoveBranding && <Feature>Remove Easy PPP branding</Feature>}
-        {canCustomizeBanner && <Feature>Banner customization</Feature>}
+        <Feature className="text-black">PPP discounts</Feature>
+        {canAccessAnalytics && <Feature className="text-black">Advanced analytics</Feature>}
+        {canRemoveBranding && <Feature className="text-black">Remove Easy PPP branding</Feature>}
+        {canCustomizeBanner && <Feature className="text-black">Banner customization</Feature>}
       </CardFooter>
     </Card>
   )
 }
+
+
+
+
+
+
 
 function Feature({
   children,
@@ -222,7 +240,8 @@ function Feature({
 }) {
   return (
     <div className={cn("flex items-center gap-2", className)}>
-      <CheckIcon className="size-4 stroke-accent bg-accent/25 rounded-full p-0.5" />
+      <CheckIcon className="size-4 stroke-black bg-black/25 rounded-full p-0.5" />
+
       <span>{children}</span>
     </div>
   )
@@ -248,3 +267,14 @@ function FooterLinkGroup({
     </div>
   )
 }
+
+
+
+
+
+
+
+
+
+
+
