@@ -24,16 +24,9 @@ import { createURL } from "@/lib/utils"
 import {  getProducts } from "@/server/db/products"
 import { TimezoneDropdownMenuItem } from "../_components/TimezoneDropdownMenuItem"
 
+export default async function AnalyticsPage(props: { searchParams: Record<string, string | undefined> }) {
+  const { searchParams } = props;
 
-export default async function AnalyticsPage({
-  searchParams,
-}: {
-  searchParams: {
-    interval?: string
-    timezone?: string
-    productId?: string
-  }
-}) {
   const { userId, redirectToSignIn } = await auth()
   if (userId == null) return redirectToSignIn()
 
