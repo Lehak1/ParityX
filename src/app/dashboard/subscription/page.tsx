@@ -24,7 +24,6 @@ import { getProductViewCount } from "@/server/db/productViews"
 import { auth } from "@clerk/nextjs/server"
 import { startOfMonth } from "date-fns"
 import { CheckIcon } from "lucide-react"
-import { redirect } from "next/navigation"
 import { createCancelSession, createCheckoutSession, createCustomerPortalSession } from "@/server/actions/stripe"
 
 export default async function SubscriptionPage() {

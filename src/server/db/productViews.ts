@@ -15,7 +15,7 @@ import {
 } from "@/lib/cache"
 import { startOfDay, subDays } from "date-fns"
 import { and, count, desc, eq, gte, SQL, sql } from "drizzle-orm"
-import { toZonedTime, format } from "date-fns-tz"
+import { toZonedTime} from "date-fns-tz"
 
 export function getProductViewCount(userId: string, startDate: Date) {
   const cacheFn = dbCache(getProductViewCountInternal, {

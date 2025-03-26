@@ -16,8 +16,8 @@ export default async function Editpage({
   params: { productId: string };
   searchParams?: { tab?: string };
 }) {
-  const { productId } = await params; 
-  const tab = (await searchParams)?.tab || "details";
+  const { productId } = params; 
+  const tab = ( searchParams)?.tab || "details";
     const { userId, redirectToSignIn } = await auth()
 
 if(userId == null) return redirectToSignIn()
@@ -27,7 +27,7 @@ if(product == null) return notFound()
 
     return(
      <PageWithBackButton backButtonHref="/dashboard/products" pageTitle="Edit Product" >
-<Tabs defaultValue="{tab}">
+<Tabs defaultValue={tab}>
 <TabsList>
 <TabsTrigger value="details">Details</TabsTrigger>
           <TabsTrigger value="countries">Country</TabsTrigger>

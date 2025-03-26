@@ -2,9 +2,9 @@ import {db} from "@/drizzle/db"
 import { CountryGroupDiscountTable, ProductCustomizationTable, ProductTable } from "@/drizzle/schema"
 import { CACHE_TAGS, dbCache, getGlobalTag, getIdTag, getUserTag, revalidateDbCache } from "@/lib/cache"
 import { removeTrailingSlash } from "@/lib/utils"
-import { and, count, desc, eq, inArray, sql } from "drizzle-orm"
+import { and, count, eq, inArray, sql } from "drizzle-orm"
 import { BatchItem } from "drizzle-orm/batch"
-import { revalidateTag } from "next/cache"
+
 
 export function getProducts(userId:string,{limit}:{limit?:number}={}){
   console.log("hi")
@@ -58,7 +58,7 @@ export async function createProduct(data:typeof ProductTable.$inferInsert){
     await db.insert(ProductCustomizationTable).values({productId:newProduct.id}).onConflictDoNothing({
         target:ProductCustomizationTable.productId,
     })
-   }catch(e){
+   }catch{
     await db.delete(ProductTable).where(eq(ProductTable.id,newProduct.id))
    }
    revalidateDbCache({
@@ -187,7 +187,7 @@ function getProductInternal({ id, userId }: { id: string; userId: string }) {
       and(eq(clerkUserId, userId), eq(idCol, id)),
   })
 }
-//producttable.id :idCol
+
 
 export async function updateCountryDiscounts(
   deleteGroup: { countryGroupId: string }[],

@@ -8,7 +8,7 @@ import {
 } from "@/server/db/productViews"
 import { canAccessAnalytics } from "@/server/permissions"
 import { auth } from "@clerk/nextjs/server"
-import { ChevronDownIcon, SearchCheck } from "lucide-react"
+import { ChevronDownIcon } from "lucide-react"
 import { ViewsByCountryChart } from "../_components/charts/ViewsByCountryChart"
 import { ViewsByPPPChart } from "../_components/charts/ViewsByPPPChart"
 import { ViewsByDayChart } from "../_components/charts/ViewsByDayChart"
@@ -21,7 +21,7 @@ import {
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { createURL } from "@/lib/utils"
-import { getProduct, getProducts } from "@/server/db/products"
+import {  getProducts } from "@/server/db/products"
 import { TimezoneDropdownMenuItem } from "../_components/TimezoneDropdownMenuItem"
 
 

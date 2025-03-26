@@ -1,10 +1,7 @@
-// import { env } from "@/data/env/client"
-
 export function Banner({
   message,
   mappings,
   customization,
-  canRemoveBranding,
 }: {
   canRemoveBranding: boolean
   message: string

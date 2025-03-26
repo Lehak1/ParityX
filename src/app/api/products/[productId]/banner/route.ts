@@ -14,7 +14,7 @@ export async function GET(
   request: NextRequest,
   context: { params: { productId: string } }
 ) {
-  const { productId } = await context.params;
+  const { productId } = context.params;
 
   if (!productId) return NextResponse.json({ error: "Product ID not found" }, { status: 404 });
   const headersMap = await headers()

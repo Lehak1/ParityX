@@ -23,7 +23,7 @@ import { updateProductCustomization } from "@/server/actions/product"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { custom, z } from "zod"
+import { z } from "zod"
 
 export function ProductCustomizationForm({
   customization,
