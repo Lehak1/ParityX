@@ -24,17 +24,188 @@ import { createURL } from "@/lib/utils"
 import {  getProducts } from "@/server/db/products"
 import { TimezoneDropdownMenuItem } from "../_components/TimezoneDropdownMenuItem"
 
-export default async function AnalyticsPage(props: { searchParams: Record<string, string | undefined> }) {
-  const { searchParams } = props;
+// export default async function AnalyticsPage(props: { searchParams: Promise<Record<string, string | undefined>> }) {
 
-  const { userId, redirectToSignIn } = await auth()
-  if (userId == null) return redirectToSignIn()
+//   const searchParams = await props.searchParams;
+
+//   const { userId, redirectToSignIn } = await auth();
+//   if (!userId) return redirectToSignIn();
+
+//   const interval =
+//     CHART_INTERVALS[searchParams.interval as keyof typeof CHART_INTERVALS] ??
+//     CHART_INTERVALS.last7Days;
+  
+//   const timezone = searchParams.timezone || "UTC";
+//   const productId = searchParams.productId;
+//   return (
+//     <>
+//       <div className="mb-6 flex justify-between items-baseline">
+//         <h1 className="text-3xl font-semibold">Analytics</h1>
+//         <HasPermission permission={canAccessAnalytics}>
+//           <div className="flex gap-2">
+//             <DropdownMenu>
+//               <DropdownMenuTrigger asChild>
+//                 <Button variant="outline">
+//                   {interval.label}
+//                   <ChevronDownIcon className="size-4 ml-2" />
+//                 </Button>
+//               </DropdownMenuTrigger>
+//               <DropdownMenuContent>
+//                 {Object.entries(CHART_INTERVALS).map(([key, value]) => (
+//                   <DropdownMenuItem asChild key={key}>
+//                     <Link
+//                       href={createURL("/dashboard/analytics", searchParams, {
+//                         interval: key,
+//                       })}
+//                     >
+//                       {value.label}
+//                     </Link>
+//                   </DropdownMenuItem>
+//                 ))}
+//               </DropdownMenuContent>
+//             </DropdownMenu>
+//             <ProductDropdown
+//               userId={userId}
+//               selectedProductId={productId}
+//               searchParams={searchParams}
+//             />
+//             <DropdownMenu>
+//               <DropdownMenuTrigger asChild>
+//                 <Button variant="outline">
+//                   {timezone}
+//                   <ChevronDownIcon className="size-4 ml-2" />
+//                 </Button>
+//               </DropdownMenuTrigger>
+//               <DropdownMenuContent>
+//                 <DropdownMenuItem asChild>
+//                   <Link
+//                     href={createURL("/dashboard/analytics", searchParams, {
+//                       timezone: "UTC",
+//                     })}
+//                   >
+//                     UTC
+//                   </Link>
+//                 </DropdownMenuItem>
+//                 <TimezoneDropdownMenuItem searchParams={searchParams} />
+//               </DropdownMenuContent>
+//             </DropdownMenu>
+//           </div>
+//         </HasPermission>
+//       </div>
+//       <HasPermission permission={canAccessAnalytics} renderFallback>
+//         <div className="flex flex-col gap-8">
+//           <ViewsByDayCard
+//             interval={interval}
+//             timezone={timezone}
+//             userId={userId}
+//             productId={productId}
+//           />
+//           <ViewsByPPPCard
+//             interval={interval}
+//             timezone={timezone}
+//             userId={userId}
+//             productId={productId}
+//           />
+//           <ViewsByCountryCard
+//             interval={interval}
+//             timezone={timezone}
+//             userId={userId}
+//             productId={productId}
+//           />
+//         </div>
+//       </HasPermission>
+//     </>
+//   )
+// }
+
+// export default async function AnalyticsPage(props: { searchParams: Promise<Record<string, string | undefined>> }) {
+//   // Await searchParams before using it
+//   const searchParams = await props.searchParams;
+
+//   const { userId, redirectToSignIn } = await auth();
+//   if (!userId) return redirectToSignIn();
+
+//   // Ensure searchParams is accessed after awaiting
+//   const interval =
+//     CHART_INTERVALS[searchParams.interval as keyof typeof CHART_INTERVALS] ??
+//     CHART_INTERVALS.last7Days;
+  
+//   const timezone = searchParams.timezone || "UTC";
+//   const productId = searchParams.productId;
+
+//   return (
+//     <>
+//       <div className="mb-6 flex justify-between items-baseline">
+//         <h1 className="text-3xl font-semibold">Analytics</h1>
+//         <HasPermission permission={canAccessAnalytics}>
+//           <div className="flex gap-2">
+//             <DropdownMenu>
+//               <DropdownMenuTrigger asChild>
+//                 <Button variant="outline">
+//                   {interval.label}
+//                   <ChevronDownIcon className="size-4 ml-2" />
+//                 </Button>
+//               </DropdownMenuTrigger>
+//               <DropdownMenuContent>
+//                 {Object.entries(CHART_INTERVALS).map(([key, value]) => (
+//                   <DropdownMenuItem asChild key={key}>
+//                     <Link href={createURL("/dashboard/analytics", searchParams, { interval: key })}>
+//                       {value.label}
+//                     </Link>
+//                   </DropdownMenuItem>
+//                 ))}
+//               </DropdownMenuContent>
+//             </DropdownMenu>
+//             <ProductDropdown userId={userId} selectedProductId={productId} searchParams={searchParams} />
+//             <DropdownMenu>
+//               <DropdownMenuTrigger asChild>
+//                 <Button variant="outline">
+//                   {timezone}
+//                   <ChevronDownIcon className="size-4 ml-2" />
+//                 </Button>
+//               </DropdownMenuTrigger>
+//               <DropdownMenuContent>
+//                 <DropdownMenuItem asChild>
+//                   <Link href={createURL("/dashboard/analytics", searchParams, { timezone: "UTC" })}>
+//                     UTC
+//                   </Link>
+//                 </DropdownMenuItem>
+//                 <TimezoneDropdownMenuItem searchParams={searchParams} />
+//               </DropdownMenuContent>
+//             </DropdownMenu>
+//           </div>
+//         </HasPermission>
+//       </div>
+//       <HasPermission permission={canAccessAnalytics} renderFallback>
+//         <div className="flex flex-col gap-8">
+//           <ViewsByDayCard interval={interval} timezone={timezone} userId={userId} productId={productId} />
+//           <ViewsByPPPCard interval={interval} timezone={timezone} userId={userId} productId={productId} />
+//           <ViewsByCountryCard interval={interval} timezone={timezone} userId={userId} productId={productId} />
+//         </div>
+//       </HasPermission>
+//     </>
+//   );
+// }
+
+
+export default async function AnalyticsPage(props: { searchParams: Promise<Record<string, string | undefined>> }) {
+  // Await searchParams
+  const rawSearchParams = await props.searchParams;
+
+  // Convert undefined values to empty strings
+  const searchParams: Record<string, string> = Object.fromEntries(
+    Object.entries(rawSearchParams).map(([key, value]) => [key, value ?? ""])
+  );
+
+  const { userId, redirectToSignIn } = await auth();
+  if (!userId) return redirectToSignIn();
 
   const interval =
     CHART_INTERVALS[searchParams.interval as keyof typeof CHART_INTERVALS] ??
-    CHART_INTERVALS.last7Days
-  const timezone = searchParams.timezone || "UTC"
-  const productId = searchParams.productId
+    CHART_INTERVALS.last7Days;
+
+  const timezone = searchParams.timezone || "UTC";
+  const productId = searchParams.productId;
 
   return (
     <>
@@ -52,22 +223,14 @@ export default async function AnalyticsPage(props: { searchParams: Record<string
               <DropdownMenuContent>
                 {Object.entries(CHART_INTERVALS).map(([key, value]) => (
                   <DropdownMenuItem asChild key={key}>
-                    <Link
-                      href={createURL("/dashboard/analytics", searchParams, {
-                        interval: key,
-                      })}
-                    >
+                    <Link href={createURL("/dashboard/analytics", searchParams, { interval: key })}>
                       {value.label}
                     </Link>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
-            <ProductDropdown
-              userId={userId}
-              selectedProductId={productId}
-              searchParams={searchParams}
-            />
+            <ProductDropdown userId={userId} selectedProductId={productId} searchParams={searchParams} />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline">
@@ -77,11 +240,7 @@ export default async function AnalyticsPage(props: { searchParams: Record<string
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem asChild>
-                  <Link
-                    href={createURL("/dashboard/analytics", searchParams, {
-                      timezone: "UTC",
-                    })}
-                  >
+                  <Link href={createURL("/dashboard/analytics", searchParams, { timezone: "UTC" })}>
                     UTC
                   </Link>
                 </DropdownMenuItem>
@@ -93,29 +252,15 @@ export default async function AnalyticsPage(props: { searchParams: Record<string
       </div>
       <HasPermission permission={canAccessAnalytics} renderFallback>
         <div className="flex flex-col gap-8">
-          <ViewsByDayCard
-            interval={interval}
-            timezone={timezone}
-            userId={userId}
-            productId={productId}
-          />
-          <ViewsByPPPCard
-            interval={interval}
-            timezone={timezone}
-            userId={userId}
-            productId={productId}
-          />
-          <ViewsByCountryCard
-            interval={interval}
-            timezone={timezone}
-            userId={userId}
-            productId={productId}
-          />
+          <ViewsByDayCard interval={interval} timezone={timezone} userId={userId} productId={productId} />
+          <ViewsByPPPCard interval={interval} timezone={timezone} userId={userId} productId={productId} />
+          <ViewsByCountryCard interval={interval} timezone={timezone} userId={userId} productId={productId} />
         </div>
       </HasPermission>
     </>
-  )
+  );
 }
+
 
 async function ProductDropdown({
   userId,

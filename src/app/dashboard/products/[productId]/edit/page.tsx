@@ -9,46 +9,48 @@ import { canCustomizeBanner, canRemoveBranding } from "@/server/permissions"
 import { auth } from "@clerk/nextjs/server"
 import { notFound } from "next/navigation"
 
-export default async function Editpage({
+export default async function EditPage({
   params,
   searchParams,
 }: {
-  params: { productId: string };
-  searchParams?: { tab?: string };
+  params: Promise<{ productId: string }>;
+  searchParams: Promise<{ tab?: string }>;
 }) {
-  const { productId } = params; 
-  const tab = ( searchParams)?.tab || "details";
-    const { userId, redirectToSignIn } = await auth()
+  // ✅ Await both params and searchParams since they are promises
+  const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
 
-if(userId == null) return redirectToSignIn()
+  const { productId } = resolvedParams;
+  const tab = resolvedSearchParams?.tab || "details";
 
-const product=await getProduct({id:productId,userId})
-if(product == null) return notFound()
+  const { userId, redirectToSignIn } = await auth();
+  if (userId == null) return redirectToSignIn();
 
-    return(
-     <PageWithBackButton backButtonHref="/dashboard/products" pageTitle="Edit Product" >
-<Tabs defaultValue={tab}>
-<TabsList>
-<TabsTrigger value="details">Details</TabsTrigger>
+  const product = await getProduct({ id: productId, userId });
+  if (product == null) return notFound();
+
+  return (
+    <PageWithBackButton backButtonHref="/dashboard/products" pageTitle="Edit Product">
+      <Tabs defaultValue={tab}>
+        <TabsList>
+          <TabsTrigger value="details">Details</TabsTrigger>
           <TabsTrigger value="countries">Country</TabsTrigger>
           <TabsTrigger value="customization">Customization</TabsTrigger>
-  </TabsList>
-  <TabsContent value="details">
+        </TabsList>
+        <TabsContent value="details">
           <DetailsTab product={product} />
         </TabsContent>
-         <TabsContent value="countries">
-          <CountryTab productId={productId} userId={userId} /> 
-        </TabsContent> 
+        <TabsContent value="countries">
+          <CountryTab productId={productId} userId={userId} />
+        </TabsContent>
         <TabsContent value="customization">
           <CustomizationsTab productId={productId} userId={userId} />
         </TabsContent>
-
-</Tabs>
-
-
-     </PageWithBackButton>
-    )
+      </Tabs>
+    </PageWithBackButton>
+  );
 }
+
 
 function DetailsTab({
 product

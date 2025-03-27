@@ -4,59 +4,122 @@ import { getProductForBanner } from "@/server/db/products";
 import { createProductView } from "@/server/db/productViews";
 import { canRemoveBranding, canShowDiscountBanner } from "@/server/permissions";
 import { headers } from "next/headers";
-import { notFound } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 import { createElement } from "react";
 
 export const runtime = "nodejs";
 
+// export async function GET(
+//   request: NextRequest,
+//   context: { params?: { productId?: string } } // ✅ Optional params
+// ) {
+//   const productId = context.params?.productId;
+
+//   if (!productId) {
+//     return NextResponse.json({ error: "Product ID not found" }, { status: 404 });
+//   }
+
+//   // ✅ Remove `await` because `headers()` is synchronous
+//   const headersMap = await headers();
+//   const requestingUrl = headersMap.get("referer") || headersMap.get("origin");
+
+//   if (!requestingUrl) return notFound();
+
+//   const countryCode = getCountryCode(request);
+//   if (!countryCode) return notFound();
+
+//   const { product, discount, country } = await getProductForBanner({
+//     id: productId,
+//     countryCode,
+//     url: requestingUrl,
+//   });
+
+//   if (!product) return notFound();
+
+//   const canShowBanner = await canShowDiscountBanner(product.clerkUserId);
+
+//   await createProductView({
+//     productId: product.id,
+//     countryId: country?.id,
+//     userId: product.clerkUserId,
+//   });
+
+//   if (!canShowBanner || !country || !discount) return notFound();
+
+//   return new Response(
+//     await getJavaScript(
+//       product,
+//       country,
+//       discount,
+//       await canRemoveBranding(product.clerkUserId)
+//     ),
+//     { headers: { "content-type": "text/javascript" } }
+//   );
+// }
+
+
 export async function GET(
   request: NextRequest,
-  context: { params?: { productId?: string } } // ✅ Optional params
+  context: { params: Promise<{ productId: string }> } // ✅ Await needed
 ) {
-  const productId = context.params?.productId;
+  const { productId } = await context.params; // ✅ Await params before using
 
   if (!productId) {
     return NextResponse.json({ error: "Product ID not found" }, { status: 404 });
   }
 
-  // ✅ Remove `await` because `headers()` is synchronous
+  
   const headersMap = await headers();
   const requestingUrl = headersMap.get("referer") || headersMap.get("origin");
 
-  if (!requestingUrl) return notFound();
+  if (!requestingUrl) {
+    return NextResponse.json({ error: "Requesting URL not found" }, { status: 404 });
+  }
 
   const countryCode = getCountryCode(request);
-  if (!countryCode) return notFound();
+  if (!countryCode) {
+    return NextResponse.json({ error: "Country code not found" }, { status: 404 });
+  }
 
-  const { product, discount, country } = await getProductForBanner({
-    id: productId,
-    countryCode,
-    url: requestingUrl,
-  });
+  try {
+    const { product, discount, country } = await getProductForBanner({
+      id: productId,
+      countryCode,
+      url: requestingUrl,
+    });
 
-  if (!product) return notFound();
+    if (!product) {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    }
 
-  const canShowBanner = await canShowDiscountBanner(product.clerkUserId);
+    const canShowBanner = await canShowDiscountBanner(product.clerkUserId);
 
-  await createProductView({
-    productId: product.id,
-    countryId: country?.id,
-    userId: product.clerkUserId,
-  });
+    await createProductView({
+      productId: product.id,
+      countryId: country?.id,
+      userId: product.clerkUserId,
+    });
 
-  if (!canShowBanner || !country || !discount) return notFound();
+    if (!canShowBanner || !country || !discount) {
+      return NextResponse.json({ error: "Banner cannot be shown" }, { status: 404 });
+    }
 
-  return new Response(
-    await getJavaScript(
+    const responseJS = await getJavaScript(
       product,
       country,
       discount,
       await canRemoveBranding(product.clerkUserId)
-    ),
-    { headers: { "content-type": "text/javascript" } }
-  );
+    );
+
+    return new Response(responseJS, { headers: { "content-type": "text/javascript" } });
+  } catch (error) {
+    console.error("Error fetching product banner:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
 }
+
+
+
 
 function getCountryCode(request: NextRequest): string {
   const customRequest = request as NextRequest & { geo?: { country?: string } };
